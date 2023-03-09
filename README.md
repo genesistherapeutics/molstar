@@ -4,7 +4,8 @@
 2. To make changes and import it to our own environment.
 - Create a branch and make changes to it
 - Run: `npm install` and `npm run build`
-- Copy over `build/viewer/molstar.js` and 'build/viewer/molstar.css` to `.../static/scripts/` and `.../static' respectively (prefixes hidden for safety) 
+- Copy over `build/viewer/molstar.js` and 'build/viewer/molstar.css` to `.../static/scripts/` and `.../static' respectively (prefixes hidden for safety)
+- Merge branch into the master branch of `genesistherapeutics/molstar` once genesis DA PR (and this PR?) is approved
 
 # ORIGINAL
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](./LICENSE)
