@@ -55,8 +55,8 @@ function createGaussianDensityVolume(ctx: VisualContext, structure: Structure, t
 export const GaussianDensityVolumeParams = {
     ...ComplexDirectVolumeParams,
     ...GaussianDensityParams,
-    ignoreHydrogens: PD.Boolean(false),
-    ignoreHydrogensVariant: PD.Select('all', PD.arrayToOptions(['all', 'non-polar'] as const)),
+    ignoreHydrogens: PD.Boolean(true),
+    ignoreHydrogensVariant: PD.Select('non-polar', PD.arrayToOptions(['all', 'non-polar'] as const)),
     includeParent: PD.Boolean(false, { isHidden: true }),
 };
 export type GaussianDensityVolumeParams = typeof GaussianDensityVolumeParams
@@ -122,8 +122,8 @@ function createUnitsGaussianDensityVolume(ctx: VisualContext, unit: Unit, struct
 export const UnitsGaussianDensityVolumeParams = {
     ...UnitsDirectVolumeParams,
     ...GaussianDensityParams,
-    ignoreHydrogens: PD.Boolean(false),
-    ignoreHydrogensVariant: PD.Select('all', PD.arrayToOptions(['all', 'non-polar'] as const)),
+    ignoreHydrogens: PD.Boolean(true),
+    ignoreHydrogensVariant: PD.Select('non-polar', PD.arrayToOptions(['all', 'non-polar'] as const)),
     includeParent: PD.Boolean(false, { isHidden: true }),
 };
 export type UnitsGaussianDensityVolumeParams = typeof UnitsGaussianDensityVolumeParams
