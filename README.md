@@ -1,3 +1,12 @@
+# Genesis implementation of Mol*
+1. Note that this is a public repo, since we've forked Mol*
+
+2. To make changes and import it to our own environment.
+- Create a branch and make changes to it
+- Run: `npm install` and `npm run build`
+- Copy over `build/viewer/molstar.js` and 'build/viewer/molstar.css` to `.../static/scripts/` and `.../static' respectively (prefixes hidden for safety) 
+
+# ORIGINAL
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](./LICENSE)
 [![npm version](https://badge.fury.io/js/molstar.svg)](https://www.npmjs.com/package/molstar)
 [![Build](https://github.com/molstar/molstar/actions/workflows/node.yml/badge.svg)](https://github.com/molstar/molstar/actions/workflows/node.yml)
