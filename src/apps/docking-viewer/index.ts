@@ -34,7 +34,7 @@ export { Viewer as DockingViewer };
 
 const DefaultViewerOptions = {
     extensions: ObjectKeys({}),
-    layoutIsExpanded: false,
+    layoutIsExpanded: true,
     layoutShowControls: true,
     layoutShowRemoteState: true,
     layoutControlsDisplay: 'reactive' as PluginLayoutControlsDisplay,
@@ -67,7 +67,7 @@ class Viewer {
                 layoutShowLog: true,
                 layoutShowLeftPanel: true,
 
-                viewportShowExpand: false,
+                viewportShowExpand: true,
                 viewportShowControls: false,
                 viewportShowSettings: false,
                 viewportShowSelectionMode: false,
