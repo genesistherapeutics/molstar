@@ -24,7 +24,7 @@ import { ParamDefinition as PD } from '../../mol-util/param-definition';
 import '../../mol-util/polyfill';
 import { ObjectKeys } from '../../mol-util/type-helpers';
 import './index.html';
-import { ShowButtons, StructurePreset, ViewportComponent } from './viewport';
+import { InteractionsPreset, ShowButtons, ViewportComponent, StructurePreset } from './viewport';
 
 require('mol-plugin-ui/skin/light.scss');
 
@@ -60,11 +60,11 @@ class Viewer {
     static async create(elementOrId: string | HTMLElement, colors = [Color(0x992211), Color(0xDDDDDD)], showButtons = true) {
         const o = {
             ...DefaultViewerOptions, ...{
-                layoutIsExpanded: false,
-                layoutShowControls: false,
+                layoutIsExpanded: true,
+                layoutShowControls: true,
                 layoutShowRemoteState: false,
                 layoutShowSequence: true,
-                layoutShowLog: false,
+                layoutShowLog: true,
                 layoutShowLeftPanel: true,
 
                 viewportShowExpand: true,
@@ -179,6 +179,25 @@ class Viewer {
             await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, StructurePreset);
         });
     }
+
+    // modified function that doesn't apply merge
+    // defaults to InteractionsPreset
+    async loadStructuresFromUrls(sources: { url: string, format: BuiltInTrajectoryFormat, isBinary?: boolean }[]) {
+        const structures: { ref: string }[] = [];
+        for (const { url, format, isBinary } of sources) {
+            const data = await this.plugin.builders.data.download({ url, isBinary });
+            const trajectory = await this.plugin.builders.structure.parseTrajectory(data, format);
+            const model = await this.plugin.builders.structure.createModel(trajectory);
+            const modelProperties = await this.plugin.builders.structure.insertModelProperties(model);
+            const structure = await this.plugin.builders.structure.createStructure(modelProperties || model);
+            const structureProperties = await this.plugin.builders.structure.insertStructureProperties(structure);
+
+            structures.push({ ref: structureProperties?.ref || structure.ref });
+            this.plugin.behaviors.canvas3d.initialized.subscribe(async v => {
+                await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, InteractionsPreset);
+            });
+        }
+    }
 }
 
 type MergeStructures = typeof MergeStructures
@@ -212,5 +231,6 @@ const MergeStructures = PluginStateTransform.BuiltIn({
         });
     }
 });
+
 
 (window as any).DockingViewer = Viewer;
