@@ -196,6 +196,7 @@ class Viewer {
             this.plugin.behaviors.canvas3d.initialized.subscribe(async v => {
                 await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, InteractionsPreset);
             });
+            this.plugin.behaviors.layout.leftPanelTabName.next('data')
         }
     }
 }
