@@ -214,7 +214,7 @@ export const InteractionsPreset = StructureRepresentationPresetProvider({
             ligand: builder.buildRepresentation(update, components.ligand, { type: 'ball-and-stick', typeParams: { ...typeParams, material: CustomMaterial, sizeFactor: 0.2 }, color: 'element-symbol', colorParams: { carbonColor: { name: 'element-symbol', params: {} } } }, { tag: 'ligand' }),
             ballAndStick: builder.buildRepresentation(update, components.surroundings, { type: 'ball-and-stick', typeParams: { ...typeParams, material: CustomMaterial, sizeFactor: 0.1, sizeAspectRatio: 1 }, color: 'element-symbol', colorParams: { carbonColor: { name: 'chain-id', params: {} } } }, { tag: 'ball-and-stick' }),
             interactions: builder.buildRepresentation(update, components.interactions, { type: InteractionsRepresentationProvider, typeParams: { ...typeParams, material: CustomMaterial, includeParent: true, parentDisplay: 'between' }, color: InteractionTypeColorThemeProvider }, { tag: 'interactions' }),
-            label: builder.buildRepresentation(update, components.surroundings, { type: 'label', typeParams: { ...typeParams, material: CustomMaterial, background: false, borderWidth: 0.1 }, color: 'uniform', colorParams: { value: Color(0x000000) } }, { tag: 'label' }),
+            label: builder.buildRepresentation(update, components.surroundings, { type: 'label', typeParams: { ...typeParams, material: CustomMaterial, background: false, borderWidth: 0 }, textSize: 0.3, color: 'uniform', colorParams: { value: Color(0x808080) } }, { tag: 'label' }),
         };
 
         await update.commit({ revertOnError: true });
@@ -224,6 +224,35 @@ export const InteractionsPreset = StructureRepresentationPresetProvider({
         return { components, representations };
     }
 });
+
+export const LigandAsLinePreset = StructureRepresentationPresetProvider({
+    id: 'preset-xtalLigand',
+    display: { name: 'Xtal' },
+    params: () => PresetParams,
+    async apply(ref, params, plugin) {
+        const structureCell = StateObjectRef.resolveAndCheck(plugin.state.data, ref);
+        const structure = structureCell?.obj?.data;
+        if (!structureCell || !structure) return {};
+
+        const components = {
+            ligand: await presetStaticComponent(plugin, structureCell, 'ligand'),
+            surroundings: await plugin.builders.structure.tryCreateComponentFromSelection(structureCell, ligandSurroundings, `surroundings`),
+            interactions: await presetStaticComponent(plugin, structureCell, 'ligand'),
+        };
+
+        const { update, builder, typeParams } = StructureRepresentationPresetProvider.reprBuilder(plugin, params);
+        const representations = {
+            ligand: builder.buildRepresentation(update, components.ligand, { type: 'line', typeParams: { ...typeParams, material: CustomMaterial}, color: 'element-symbol', colorParams: { carbonColor: { name: 'element-symbol', params: {} } } }, { tag: 'ligand' }),
+        };
+
+        await update.commit({ revertOnError: true });
+        await shinyStyle(plugin);
+        plugin.managers.interactivity.setProps({ granularity: 'element' });
+
+        return { components, representations };
+    }
+});
+
 
 export const ShowButtons = PluginConfig.item('showButtons', true);
 
