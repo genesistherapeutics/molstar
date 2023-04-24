@@ -24,7 +24,7 @@ import { ParamDefinition as PD } from '../../mol-util/param-definition';
 import '../../mol-util/polyfill';
 import { ObjectKeys } from '../../mol-util/type-helpers';
 import './index.html';
-import { InteractionsPreset, ShowButtons, ViewportComponent, StructurePreset } from './viewport';
+import { InteractionsPreset, ShowButtons, ViewportComponent, StructurePreset, XtalLigandPreset } from './viewport';
 
 require('mol-plugin-ui/skin/light.scss');
 
@@ -182,7 +182,7 @@ class Viewer {
 
     // modified function that doesn't apply merge
     // defaults to InteractionsPreset
-    async loadStructuresFromUrls(sources: { url: string, format: BuiltInTrajectoryFormat, isBinary?: boolean }[]) {
+    async loadStructuresFromUrls(sources: { url: string, format: BuiltInTrajectoryFormat, isBinary?: boolean }[], isXtalLigand: boolean = false) {
         const structures: { ref: string }[] = [];
         for (const { url, format, isBinary } of sources) {
             const data = await this.plugin.builders.data.download({ url, isBinary });
@@ -194,7 +194,7 @@ class Viewer {
 
             structures.push({ ref: structureProperties?.ref || structure.ref });
             this.plugin.behaviors.canvas3d.initialized.subscribe(async v => {
-                await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, InteractionsPreset);
+                await this.plugin.builders.structure.representation.applyPreset(structureProperties || structure, isXtalLigand ? XtalLigandPreset : InteractionsPreset);
             });
             this.plugin.behaviors.layout.leftPanelTabName.next('data')
         }
