@@ -217,7 +217,7 @@ export const InteractionsPreset = StructureRepresentationPresetProvider({
     }
 });
 
-export const XtalLigandPreset = StructureRepresentationPresetProvider({
+export const LigandAsLinePreset = StructureRepresentationPresetProvider({
     id: 'preset-xtalLigand',
     display: { name: 'Xtal' },
     params: () => PresetParams,
